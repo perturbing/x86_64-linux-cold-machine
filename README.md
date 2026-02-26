@@ -44,6 +44,9 @@ This creates `result/nixos.img` - a raw EFI disk image ready to write to USB.
 Replace `/dev/sda` with your actual USB device (check with `lsblk`):
 
 ```bash
+# if you see MOUNTPOINTS on /dev/sda or /dev/sdaX run below for each
+sudo umount /dev/sdaX 2>/dev/null || true
+
 # Wipe existing filesystem signatures
 sudo wipefs -a /dev/sda
 
