@@ -55,6 +55,16 @@ sudo dd if=./result/nixos.img of=/dev/sda bs=16M status=progress conv=fsync
 
 # Ensure all writes are flushed
 sync
+
+# Given that we write an OS of size ~11gb to a disk that is larger
+# if you do the below command it will give a `GPT PMBR size mismatch`
+# Warning, this because we generated the image without knowing the size
+# of the target usb.
+sudo fdisk -l /dev/sda
+
+# You can fix this by running
+sudo sgdisk -e /dev/sda
+sudo partprobe /dev/sda
 ```
 
 ## Boot and Usage
