@@ -7,18 +7,13 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    cardano-node-src.url = "github:intersectmbo/cardano-node";
-    cardano-addresses-src.url = "github:perturbing/cardano-addresses";
-    cardano-signer-src.url = "github:perturbing/cardano-signer-nix";
   };
 
   nixConfig = {
     extra-substituters = [
       "https://cache.nixos.org"
-      "https://cache.iog.io"
     ];
     extra-trusted-public-keys = [
-      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
   };
@@ -28,9 +23,6 @@
       self,
       nixpkgs,
       nixos-generators,
-      cardano-node-src,
-      cardano-addresses-src,
-      cardano-signer-src,
       ...
     }:
     let
@@ -100,9 +92,6 @@
                 gnome-text-editor
                 # add other tool here
 
-                cardano-node-src.packages.${system}.cardano-cli
-                cardano-addresses-src.packages.${system}."cardano-addresses:exe:cardano-address"
-                cardano-signer-src.packages.${system}.cardano-signer
               ];
 
               # Ephemeral system: all state is volatile
