@@ -67,7 +67,7 @@
               # Basic user setup
               users.users.nixos = {
                 isNormalUser = true;
-                hashedPassword = "!";
+                hashedPassword = "";
                 extraGroups = [ "wheel" ];
               };
 
