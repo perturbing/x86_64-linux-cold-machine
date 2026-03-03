@@ -92,12 +92,32 @@
               systemd.services."getty@tty1".enable = false;
               systemd.services."autovt@tty1".enable = false;
 
+              # YubiKey GPG support
+              services.pcscd.enable = true;
+              services.udev.packages = with pkgs; [
+                yubikey-personalization
+                libu2f-host
+              ];
+              services.udev.extraRules = ''
+                # YubiKey devices - Yubico vendor ID 0x1050
+                SUBSYSTEMS=="usb", ATTRS{idVendor}=="1050", TAG+="uaccess", MODE="0660", GROUP="users"
+              '';
+              hardware.gpgSmartcards.enable = true;
+              programs.gnupg.agent = {
+                enable = true;
+                pinentryPackage = pkgs.pinentry-gnome3;
+              };
+
               # Cardano tools and basic utilities
               environment.systemPackages = with pkgs; [
                 gnome-terminal
                 nautilus
                 vim
                 gnome-text-editor
+                # YubiKey tools
+                gnupg
+                yubikey-personalization
+                yubikey-manager
 
                 cardano-node.packages.${system}.cardano-cli
                 cardano-addresses.packages.${system}."cardano-addresses:exe:cardano-address"
