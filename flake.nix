@@ -68,10 +68,52 @@
               users.users.nixos = {
                 isNormalUser = true;
                 hashedPassword = "";
-                extraGroups = [ "wheel" ];
+                extraGroups = ["wheel" "disk"];
               };
 
               users.allowNoPasswordLogin = true;
+
+              # Allow nixos user to use disk utilities without password
+              security.sudo.extraRules = [
+                {
+                  users = ["nixos"];
+                  commands = [
+                    {
+                      command = "/run/current-system/sw/bin/mount";
+                      options = ["NOPASSWD"];
+                    }
+                    {
+                      command = "/run/current-system/sw/bin/umount";
+                      options = ["NOPASSWD"];
+                    }
+                    {
+                      command = "/run/current-system/sw/bin/fdisk";
+                      options = ["NOPASSWD"];
+                    }
+                    {
+                      command = "/run/current-system/sw/bin/cfdisk";
+                      options = ["NOPASSWD"];
+                    }
+                    {
+                      command = "/run/current-system/sw/bin/parted";
+                      options = ["NOPASSWD"];
+                    }
+                    {
+                      command = "/run/current-system/sw/bin/gdisk";
+                      options = ["NOPASSWD"];
+                    }
+                    {
+                      command = "/run/current-system/sw/bin/sgdisk";
+                      options = ["NOPASSWD"];
+                    }
+                  ];
+                }
+              ];
+
+              # Allow non-root users to read dmesg
+              boot.kernel.sysctl = {
+                "kernel.dmesg_restrict" = 0;
+              };
 
               # GNOME desktop
               services.xserver.enable = true;
@@ -118,6 +160,9 @@
                 gnupg
                 yubikey-personalization
                 yubikey-manager
+                # Disk utilities
+                parted
+                gptfdisk
 
                 cardano-node.packages.${system}.cardano-cli
                 cardano-addresses.packages.${system}."cardano-addresses:exe:cardano-address"
