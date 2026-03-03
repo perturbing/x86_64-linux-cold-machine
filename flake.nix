@@ -7,9 +7,9 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    cardano-node-src.url = "github:intersectmbo/cardano-node";
-    cardano-addresses-src.url = "github:perturbing/cardano-addresses";
-    cardano-signer-src.url = "github:perturbing/cardano-signer-nix";
+    cardano-node.url = "github:intersectmbo/cardano-node";
+    cardano-addresses.url = "github:perturbing/cardano-addresses";
+    cardano-signer.url = "github:perturbing/cardano-signer-nix";
   };
 
   nixConfig = {
@@ -23,28 +23,28 @@
     ];
   };
 
-  outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      nixos-generators,
-      cardano-node-src,
-      cardano-addresses-src,
-      cardano-signer-src,
-      ...
-    }:
-    let
-      system = "x86_64-linux";
-    in
-    {
-      packages.${system}.default = nixos-generators.nixosGenerate {
-        inherit system;
-        specialArgs = inputs;
-        format = "raw-efi";
-        modules = [
-          (
-            { lib, pkgs, ... }:
-            {
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    nixos-generators,
+    cardano-node,
+    cardano-addresses,
+    cardano-signer,
+    ...
+  }: let
+    system = "x86_64-linux";
+  in {
+    packages.${system}.default = nixos-generators.nixosGenerate {
+      inherit system;
+      specialArgs = inputs;
+      format = "raw-efi";
+      modules = [
+        (
+          {
+            lib,
+            pkgs,
+            ...
+          }: {
               # UEFI bootloader
               boot.loader.systemd-boot.enable = true;
               boot.loader.efi.canTouchEfiVariables = true;
@@ -98,11 +98,10 @@
                 nautilus
                 vim
                 gnome-text-editor
-                # add other tool here
 
-                cardano-node-src.packages.${system}.cardano-cli
-                cardano-addresses-src.packages.${system}."cardano-addresses:exe:cardano-address"
-                cardano-signer-src.packages.${system}.cardano-signer
+                cardano-node.packages.${system}.cardano-cli
+                cardano-addresses.packages.${system}."cardano-addresses:exe:cardano-address"
+                cardano-signer.packages.${system}.cardano-signer
               ];
 
               # Ephemeral system: all state is volatile

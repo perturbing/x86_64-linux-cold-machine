@@ -202,19 +202,19 @@
         "type": "github"
       }
     },
-    "cardano-addresses-src": {
+    "cardano-addresses": {
       "inputs": {
         "CHaP": "CHaP",
         "flake-utils": "flake-utils",
         "hackageNix": "hackageNix",
         "haskellNix": "haskellNix",
         "hostNixpkgs": [
-          "cardano-addresses-src",
+          "cardano-addresses",
           "nixpkgs"
         ],
         "iohkNix": "iohkNix",
         "nixpkgs": [
-          "cardano-addresses-src",
+          "cardano-addresses",
           "haskellNix",
           "nixpkgs-2305"
         ]
@@ -238,11 +238,11 @@
         "flake-utils": "flake-utils_2",
         "hackageNix": "hackageNix_2",
         "haskellNix": [
-          "cardano-node-src",
+          "cardano-node",
           "haskellNix"
         ],
         "nixpkgs": [
-          "cardano-node-src",
+          "cardano-node",
           "nixpkgs"
         ]
       },
@@ -260,7 +260,7 @@
         "type": "github"
       }
     },
-    "cardano-node-src": {
+    "cardano-node": {
       "inputs": {
         "CHaP": "CHaP_2",
         "cardano-automation": "cardano-automation",
@@ -272,18 +272,18 @@
         "incl": "incl",
         "iohkNix": "iohkNix_2",
         "nixpkgs": [
-          "cardano-node-src",
+          "cardano-node",
           "haskellNix",
           "nixpkgs-unstable"
         ],
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1771559897,
-        "narHash": "sha256-5tKR9CFjOCVNOoHaZCWD/2Imqiyo3+O6kLzSJUp6fY0=",
+        "lastModified": 1772534649,
+        "narHash": "sha256-vosk61ZG7Eyya7qeM01g5OMIuJkrOpQtNuDzU5TEfCU=",
         "owner": "intersectmbo",
         "repo": "cardano-node",
-        "rev": "bd3e580eab25afab55085e981d2e3db74498aa2c",
+        "rev": "aa917d0827736cb6d15b49007f0a303bb9cd45e6",
         "type": "github"
       },
       "original": {
@@ -324,7 +324,7 @@
         "type": "github"
       }
     },
-    "cardano-signer-src": {
+    "cardano-signer": {
       "inputs": {
         "flake-utils": "flake-utils_3",
         "nixpkgs": "nixpkgs_2"
@@ -622,7 +622,7 @@
         "ghc910X": "ghc910X",
         "ghc911": "ghc911",
         "hackage": [
-          "cardano-addresses-src",
+          "cardano-addresses",
           "hackageNix"
         ],
         "hls-1.10": "hls-1.10",
@@ -638,7 +638,7 @@
         "hydra": "hydra",
         "iserv-proxy": "iserv-proxy",
         "nixpkgs": [
-          "cardano-addresses-src",
+          "cardano-addresses",
           "nixpkgs"
         ],
         "nixpkgs-2003": "nixpkgs-2003",
@@ -676,7 +676,7 @@
         "cardano-shell": "cardano-shell_2",
         "flake-compat": "flake-compat_3",
         "hackage": [
-          "cardano-node-src",
+          "cardano-node",
           "hackageNix"
         ],
         "hackage-for-stackage": "hackage-for-stackage",
@@ -697,7 +697,7 @@
         "hpc-coveralls": "hpc-coveralls_2",
         "iserv-proxy": "iserv-proxy_2",
         "nixpkgs": [
-          "cardano-node-src",
+          "cardano-node",
           "nixpkgs"
         ],
         "nixpkgs-2305": "nixpkgs-2305_2",
@@ -1132,7 +1132,7 @@
       "inputs": {
         "nix": "nix",
         "nixpkgs": [
-          "cardano-addresses-src",
+          "cardano-addresses",
           "haskellNix",
           "hydra",
           "nix",
@@ -1174,7 +1174,7 @@
       "inputs": {
         "blst": "blst",
         "nixpkgs": [
-          "cardano-addresses-src",
+          "cardano-addresses",
           "nixpkgs"
         ],
         "secp256k1": "secp256k1",
@@ -1198,7 +1198,7 @@
       "inputs": {
         "blst": "blst_2",
         "nixpkgs": [
-          "cardano-node-src",
+          "cardano-node",
           "nixpkgs"
         ],
         "secp256k1": "secp256k1_2",
@@ -1664,9 +1664,9 @@
     },
     "root": {
       "inputs": {
-        "cardano-addresses-src": "cardano-addresses-src",
-        "cardano-node-src": "cardano-node-src",
-        "cardano-signer-src": "cardano-signer-src",
+        "cardano-addresses": "cardano-addresses",
+        "cardano-node": "cardano-node",
+        "cardano-signer": "cardano-signer",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_3"
       }
