@@ -83,6 +83,20 @@
                 }
               ];
 
+              # Allow wheel group to use sudo without password
+              security.sudo.wheelNeedsPassword = false;
+
+              # Allow wheel group users to perform disk operations without password
+              security.polkit.enable = true;
+              security.polkit.extraConfig = ''
+                polkit.addRule(function(action, subject) {
+                  if (subject.isInGroup("wheel") &&
+                      action.id.indexOf("org.freedesktop.udisks2.") == 0) {
+                    return polkit.Result.YES;
+                  }
+                });
+              '';
+
               # Allow non-root users to read dmesg
               boot.kernel.sysctl = {
                 "kernel.dmesg_restrict" = 0;
@@ -141,6 +155,12 @@
                 inputs.cardano-addresses.packages.${system}."cardano-addresses:exe:cardano-address"
                 inputs.cardano-signer.packages.${system}.cardano-signer
               ];
+
+              # Enable bash completion for Cardano tools
+              programs.bash.interactiveShellInit = ''
+                source <(cardano-cli --bash-completion-script cardano-cli)
+                source <(cardano-address --bash-completion-script cardano-address)
+              '';
 
               # Ephemeral system: all state is volatile
               boot.tmp.useTmpfs = true;
