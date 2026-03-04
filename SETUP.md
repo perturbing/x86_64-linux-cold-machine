@@ -1,6 +1,6 @@
 # Post-Boot Setup Instructions
 
-This guide walks you through setting up a USB drive with a public FAT partition and an encrypted F2FS partition after booting the image.
+This guide walks you through setting up a USB drive with both a public FAT partition and an encrypted F2FS partition after booting the image. The former is for share files across devices (public usage) and the latter for secure storage of data (private).
 
 ## Prerequisites
 
@@ -21,7 +21,9 @@ Launch the GNOME Disks utility:
 gnome-disks
 ```
 
-Or search for "Disks" in your application menu.
+Or search for "Disks" in your application menu. It should look something like this
+
+![gnome-disk-preview](images/image-gnome-disk.png)
 
 ### 3. Select Your USB Drive
 
@@ -30,6 +32,9 @@ In the Disks interface:
 - Click on it to select it
 - **Warning**: Make sure you've selected the correct drive to avoid data loss
 
+![gnome-disk-usb](images/image-gnome-disk-usb.png)
+
+
 ### 4. Delete Existing Partitions (if any)
 
 If the USB drive has existing partitions:
@@ -37,21 +42,30 @@ If the USB drive has existing partitions:
 - Click the "-" (minus) button to delete it
 - Repeat until all partitions are removed
 
+![gnome-disk-delete-partition](images/image-gnome-disk-delete-partition.png)
+
 ### 5. Create the Public FAT Partition
 
 1. Click the "+" (plus) button to create a new partition
 2. Set the partition size to **2 GB** (2000 MB)
+![gnome-disk-2gb-partition](images/image-gnome-disk-2gb-partition.png)
 3. Set the filesystem type to **FAT** (or FAT32)
 4. Set the partition name/label to **public**
 5. Click "Create" to confirm
+![gnome-disk-2gb-fat](images/image-gnome-disk-2gb-fat.png)
 
 ### 6. Create the Encrypted LUKS Partition
 
 1. Click the "+" (plus) button on the remaining free space
+![gnome-disk-enc-partition-free](images/image-gnome-disk-enc-partition-free.png)
 2. Use all remaining space for this partition
+![gnome-disk-enc-partition-remaining](images/image-gnome-disk-enc-partition-remaining.png)
 3. Select **Internal disk for use with Linux systems only (Ext4)**
 4. Enable the **Password protect volume (LUKS)** option
+![gnome-disk-enc-partition-ext4](images/image-gnome-disk-enc-partition-ext4.png)
 5. Enter a strong passphrase when prompted
+![gnome-disk-enc-partition-password](images/image-gnome-disk-enc-partition-password.png)
+
 6. **Important**: Store this passphrase securely - you cannot recover data without it
 7. After the LUKS volume is created, format it with **F2FS**:
    - Select the unlocked LUKS volume
@@ -59,7 +73,9 @@ If the USB drive has existing partitions:
    - Select **F2FS** as the filesystem type
    - Set the partition name/label to **encrypted**
    - Click "Format" to confirm
-
+![gnome-disk-enc-partition-format-f2fs](images/image-gnome-disk-enc-partition-format-f2fs.png)
+![gnome-disk-enc-partition-name-f2fs](images/image-gnome-disk-enc-partition-name-f2fs.png)
+![gnome-disk-enc-partition-luks-f2fs](images/image-gnome-disk-enc-partition-luks-f2fs.png)
 ### 7. Verify the Setup
 
 Your USB drive should now have:
