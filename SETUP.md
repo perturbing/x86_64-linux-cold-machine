@@ -248,7 +248,7 @@ This document covers a basic cold storage setup suitable for most users. However
 
 The following advanced techniques are **not covered** in this document but may be worth investigating based on your security needs:
 
-- **Mnemonic-based key derivation**: Using `cardano-address` to generate keys from BIP39 mnemonic phrases (12-24 word seed phrases), allowing recovery from memorizable words instead of binary key files
+- **Mnemonic-based key derivation**: Using `cardano-address` to generate keys from BIP39 mnemonic phrases (12-24 word seed phrases), allowing recovery from memorizable words instead of binary key files — see [MNEMONIC-KEYGEN.md](MNEMONIC-KEYGEN.md) for a step-by-step guide using the `cardano-seed-keygen` script included in this image
 
 - **Hardware security keys**: Dedicated cryptographic hardware devices such as:
   - YubiKey integration with GPG encryption for two-factor authentication before accessing signing keys

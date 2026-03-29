@@ -138,7 +138,97 @@
               };
 
               # Cardano tools and basic utilities
-              environment.systemPackages = with pkgs; [
+              environment.systemPackages = with pkgs; let
+                cardano-cli = inputs.cardano-node.packages.${system}.cardano-cli;
+                cardano-address = inputs.cardano-addresses.packages.${system}."cardano-addresses:exe:cardano-address";
+                cardano-seed-keygen = pkgs.writeShellScriptBin "cardano-seed-keygen" ''
+                  set -euo pipefail
+
+                  # cardano-seed-keygen: derive Cardano payment keys from a 24-word mnemonic.
+                  #
+                  # Usage:
+                  #   cardano-seed-keygen                    – generate a fresh phrase and derive keys
+                  #   cardano-seed-keygen recovery-phrase.prv – derive keys from an existing phrase file
+                  #
+                  # Outputs (all written to the current directory):
+                  #   recovery-phrase.prv  – the 24-word BIP39 mnemonic   (KEEP SECRET)
+                  #   payment.skey         – extended payment signing key  (KEEP SECRET)
+                  #   payment.vkey         – payment verification key      (safe to share)
+                  #   payment.hash         – payment key hash              (safe to share)
+                  #
+                  # Intermediate files (root.xprv, payment.xsk) are deleted after use.
+
+                  CARDANO_ADDRESS="${cardano-address}/bin/cardano-address"
+                  CARDANO_CLI="${cardano-cli}/bin/cardano-cli"
+
+                  EXISTING_PHRASE=""
+                  if [ $# -ge 1 ]; then
+                    EXISTING_PHRASE="$1"
+                    if [ ! -f "$EXISTING_PHRASE" ]; then
+                      echo "ERROR: phrase file '$EXISTING_PHRASE' not found." >&2
+                      exit 1
+                    fi
+                  fi
+
+                  # When deriving from an existing phrase, recovery-phrase.prv is not written.
+                  FILES_TO_CHECK="payment.skey payment.vkey payment.hash"
+                  if [ -z "$EXISTING_PHRASE" ]; then
+                    FILES_TO_CHECK="recovery-phrase.prv $FILES_TO_CHECK"
+                  fi
+
+                  for f in $FILES_TO_CHECK; do
+                    if [ -f "$f" ]; then
+                      echo "ERROR: '$f' already exists in $(pwd). Refusing to overwrite." >&2
+                      echo "Move or delete existing files before running this script." >&2
+                      exit 1
+                    fi
+                  done
+
+                  if [ -z "$EXISTING_PHRASE" ]; then
+                    echo "==> Generating 24-word recovery phrase..."
+                    "$CARDANO_ADDRESS" recovery-phrase generate --size 24 > recovery-phrase.prv
+                    PHRASE_FILE="recovery-phrase.prv"
+                  else
+                    echo "==> Using existing phrase file: $EXISTING_PHRASE"
+                    PHRASE_FILE="$EXISTING_PHRASE"
+                  fi
+
+                  echo "==> Deriving root extended private key..."
+                  "$CARDANO_ADDRESS" key from-recovery-phrase Shelley < "$PHRASE_FILE" > root.xprv
+
+                  echo "==> Deriving child key at path 1852H/1815H/0H/0/0..."
+                  "$CARDANO_ADDRESS" key child 1852H/1815H/0H/0/0 < root.xprv > payment.xsk
+
+                  echo "==> Converting to cardano-cli signing key format..."
+                  "$CARDANO_CLI" key convert-cardano-address-key \
+                    --shelley-payment-key \
+                    --signing-key-file payment.xsk \
+                    --out-file payment.skey
+
+                  echo "==> Deriving verification key..."
+                  "$CARDANO_CLI" key verification-key \
+                    --signing-key-file payment.skey \
+                    --verification-key-file payment.vkey
+
+                  echo "==> Computing key hash..."
+                  "$CARDANO_CLI" address key-hash \
+                    --payment-verification-key-file payment.vkey > payment.hash
+
+                  echo "==> Cleaning up intermediate files..."
+                  rm -f root.xprv payment.xsk
+
+                  echo ""
+                  echo "Done. Files written to $(pwd):"
+                  if [ -z "$EXISTING_PHRASE" ]; then
+                    echo "  recovery-phrase.prv  (SECRET – back this up on paper or encrypted storage)"
+                  fi
+                  echo "  payment.skey         (SECRET – keep on encrypted partition only)"
+                  echo "  payment.vkey         (public – share with orchestrator)"
+                  echo "  payment.hash         (public – share with orchestrator)"
+                  echo ""
+                  echo "Key hash: $(cat payment.hash)"
+                '';
+              in [
                 gnome-terminal
                 nautilus
                 vim
@@ -151,9 +241,10 @@
                 parted
                 gptfdisk
 
-                inputs.cardano-node.packages.${system}.cardano-cli
-                inputs.cardano-addresses.packages.${system}."cardano-addresses:exe:cardano-address"
+                cardano-cli
+                cardano-address
                 inputs.cardano-signer.packages.${system}.cardano-signer
+                cardano-seed-keygen
               ];
 
               # Enable bash completion for Cardano tools
