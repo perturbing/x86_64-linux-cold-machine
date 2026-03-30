@@ -22,7 +22,7 @@ Download the latest pre-built image from the releases:
 
 ```bash
 # Download the compressed image (1.8GB download)
-curl -L -O https://github.com/perturbing/x86_64-linux-cold-machine/releases/download/v0.2.0/nixos.img.zst
+curl -L -O https://github.com/perturbing/x86_64-linux-cold-machine/releases/download/v0.3.0/nixos.img.zst
 ```
 
 ### 2. Decompress the Image
@@ -42,10 +42,10 @@ unzstd -c nixos.img.zst > nixos.img
 
 ```bash
 # Verify the SHA256 hash (Linux)
-echo "ac0f647246832c5563d0937d114de2cadc26fb38d7a3673788922d9f5111f6ca  nixos.img" | sha256sum -c
+echo "812b0f293ddb8e4818953757210b4f25f719f48b2e6e04428b7ce782b947ae5b  nixos.img" | sha256sum -c
 
 # Or on macOS
-echo "ac0f647246832c5563d0937d114de2cadc26fb38d7a3673788922d9f5111f6ca  nixos.img" | shasum -a 256 -c
+echo "812b0f293ddb8e4818953757210b4f25f719f48b2e6e04428b7ce782b947ae5b  nixos.img" | shasum -a 256 -c
 ```
 
 If the hash matches, you'll see `nixos.img: OK`. You now have a verified image ready to write to a USB drive.
