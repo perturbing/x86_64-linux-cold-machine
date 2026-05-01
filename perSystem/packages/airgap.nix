@@ -240,10 +240,12 @@
                 # Disk utilities
                 parted
                 gptfdisk
+                zip
 
                 cardano-cli
                 cardano-address
                 inputs.cardano-signer.packages.${system}.cardano-signer
+                inputs.cquisitor.packages.${system}.cquisitor
                 cardano-seed-keygen
               ];
 

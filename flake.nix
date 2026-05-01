@@ -11,6 +11,7 @@
     cardano-node.url = "github:intersectmbo/cardano-node";
     cardano-addresses.url = "github:perturbing/cardano-addresses";
     cardano-signer.url = "github:perturbing/cardano-signer-nix";
+    cquisitor.url = "github:perturbing/cquisitor/nix-flake";
   };
 
   nixConfig = {
